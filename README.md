@@ -33,3 +33,11 @@ type Validators<T> = {
 
 This project intentionally avoids abstracting form behavior to explore how much correctness can be enforced purely by TypeScript types.
 The goal is not feature completeness, but clarity of type-driven design.
+
+## Errors<T>
+
+Errors are keyed by form fields.
+
+```ts
+type Errors<T> = Partial<Record<keyof T, string>>;
+```
