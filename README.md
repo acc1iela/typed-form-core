@@ -15,3 +15,21 @@ at compile time in form handling.
 ✘ Field arrays
 ✘ Async validation
 ✘ UI components
+
+## Type Design
+
+### Validators<T>
+
+Each field can define a validator function.
+Teh validator receives the field value and all form values.
+
+```ts
+type Validators<T> = {
+  [K in keyof T]?: (value: T[K], values: T) => string | null;
+};
+```
+
+## Why not React Hook Form?
+
+This project intentionally avoids abstracting form behavior to explore how much correctness can be enforced purely by TypeScript types.
+The goal is not feature completeness, but clarity of type-driven design.
