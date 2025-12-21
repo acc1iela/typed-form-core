@@ -21,7 +21,7 @@ at compile time in form handling.
 ### Validators<T>
 
 Each field can define a validator function.
-Teh validator receives the field value and all form values.
+The validator receives the field value and all form values.
 
 ```ts
 type Validators<T> = {
