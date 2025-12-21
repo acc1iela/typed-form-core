@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "name": "typed-form-core",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "typescript": "^5.9.3"
+  }
+}
