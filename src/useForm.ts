@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import type { Errors, UseFormOptions, UseFormReturn } from './types';
 
 export function useForm<TValues extends Record<string, unknown>>(
@@ -108,10 +108,10 @@ export function useForm<TValues extends Record<string, unknown>>(
   );
 
   return {
-    values,
-    errors,
-    touched,
-    isSubmitting,
+    values: useMemo(() => values, [values]),
+    errors: useMemo(() => errors, [errors]),
+    touched: useMemo(() => touched, [touched]),
+    isSubmitting: useMemo(() => isSubmitting, [isSubmitting]),
     register,
     setValues: setValue,
     validateField,
