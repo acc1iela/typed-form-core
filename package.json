@@ -21,7 +21,7 @@
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
     "test": "vitest",
-    "test:types": "tsd",
+    "test:types": "npm run build && cp src/index.test-d.ts dist/index.test-d.ts && tsd",
     "test:all": "npm run test:types && npm test",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"

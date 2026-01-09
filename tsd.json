@@ -1,4 +1,5 @@
 {
+  "directory": "src",
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
