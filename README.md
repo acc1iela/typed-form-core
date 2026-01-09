@@ -148,10 +148,22 @@ Creates a form instance with type-safe field management.
 
 **Methods:**
 
-- `register<K extends keyof TValues>(name: K)` - Register a field and get its props
+- `register<K extends keyof TValues>(name: K): RegisterReturn<TValues, K>` - Register a field and get its props
   - Returns: `{ name, value, onChange, onBlur }`
   - `onChange(value: TValues[K])` - Update field value
   - `onBlur()` - Mark field as touched and trigger validation
+
+  **Example with explicit typing:**
+  ```tsx
+  import type { RegisterReturn } from 'typed-form-core';
+
+  type LoginForm = { username: string; password: string };
+  const form = useForm({ defaultValues: { username: '', password: '' } });
+
+  // Explicitly type the field
+  const usernameField: RegisterReturn<LoginForm, 'username'> = form.register('username');
+  // usernameField.value is guaranteed to be string
+  ```
 
 - `setValues<K extends keyof TValues>(name: K, value: TValues[K])` - Manually update a field value
 
@@ -185,6 +197,61 @@ form.setValues('age', 'not a number');
 form.setValues('age', 25);
 form.register('username').onChange('valid string');
 ```
+
+## Type Design Philosophy
+
+このプロジェクトは、TypeScript の型システムでどこまで不正な状態をコンパイル時に防げるかを探求します。
+
+### キーと値の強い結合
+
+最も重要な不変条件：
+
+> **フィールドのキーが決まれば、値の型も必ず決まる**
+
+この不変条件を実現するために、すべての API で以下のパターンを徹底しています：
+
+```typescript
+// K でキーを制約し、TValues[K] で値の型を取得
+<K extends keyof TValues>(name: K) => TValues[K]
+```
+
+これにより以下が保証されます：
+
+- `register('username')` の返り値は `RegisterReturn<TValues, 'username'>` 型
+- `setValues('username', value)` は `TValues['username']` 型の値のみ受け入れ
+- `validators.username` は `(value: TValues['username'], values: TValues) => ...` 型
+
+### 学習目的
+
+このプロジェクトが探求する問い：
+
+- **型でどこまでランタイムエラーを防げるか？**
+  - バリデーションロジックを型で表現できるか？
+  - 不正な状態を「表現できない」設計は可能か？
+
+- **バリデーションは型とランタイムのどちらで行うべきか？**
+  - 型による静的チェックの限界はどこか？
+  - ランタイムバリデーションが必要な場面は？
+
+- **型の複雑さと使いやすさのトレードオフは？**
+  - 型安全性を追求すると API は複雑になるか？
+  - シンプルさを保ちながら型安全にできるか？
+
+### 意図的なスコープ制限
+
+以下の機能は意図的に対象外としています：
+
+- **ネストしたフィールド**（例：`user.address.city`）
+  - 型推論が複雑化し、設計意図が不明瞭になるため
+
+- **非同期バリデーション**
+  - 型による保証が困難になり、ランタイムの状態管理が複雑化するため
+
+- **フィールド配列**
+  - 動的な型推論が必要になり、型の分かりやすさが損なわれるため
+
+**「型の分かりやすさ」を優先**するため、これらの機能は追加しません。
+機能の網羅性ではなく、型設計の明確さを重視しています。
 
 ## Type Design
 
