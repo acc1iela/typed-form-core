@@ -200,58 +200,57 @@ form.register('username').onChange('valid string');
 
 ## Type Design Philosophy
 
-このプロジェクトは、TypeScript の型システムでどこまで不正な状態をコンパイル時に防げるかを探求します。
+This project explores how far TypeScript's type system can prevent invalid states at compile time.
 
-### キーと値の強い結合
+### Key-Value Binding
 
-最も重要な不変条件：
+The most important invariant:
 
-> **フィールドのキーが決まれば、値の型も必ず決まる**
+> **When a field key is determined, its value type is automatically determined.**
 
-この不変条件を実現するために、すべての API で以下のパターンを徹底しています：
+To achieve this invariant, we consistently use this pattern across all APIs:
 
 ```typescript
-// K でキーを制約し、TValues[K] で値の型を取得
+// Constrain the key with K, and get the value type with TValues[K]
 <K extends keyof TValues>(name: K) => TValues[K]
 ```
 
-これにより以下が保証されます：
+This ensures:
 
-- `register('username')` の返り値は `RegisterReturn<TValues, 'username'>` 型
-- `setValues('username', value)` は `TValues['username']` 型の値のみ受け入れ
-- `validators.username` は `(value: TValues['username'], values: TValues) => ...` 型
+- `register('username')` returns type `RegisterReturn<TValues, 'username'>`
+- `setValues('username', value)` only accepts values of type `TValues['username']`
+- `validators.username` has type `(value: TValues['username'], values: TValues) => ...`
 
-### 学習目的
+### Learning Goals
 
-このプロジェクトが探求する問い：
+This project explores these questions:
 
-- **型でどこまでランタイムエラーを防げるか？**
-  - バリデーションロジックを型で表現できるか？
-  - 不正な状態を「表現できない」設計は可能か？
+- **How far can types prevent runtime errors?**
+  - Can validation logic be expressed in types?
+  - Is it possible to design states that "cannot be represented" incorrectly?
 
-- **バリデーションは型とランタイムのどちらで行うべきか？**
-  - 型による静的チェックの限界はどこか？
-  - ランタイムバリデーションが必要な場面は？
+- **Should validation be done in types or at runtime?**
+  - Where are the limits of static type checking?
+  - When is runtime validation necessary?
 
-- **型の複雑さと使いやすさのトレードオフは？**
-  - 型安全性を追求すると API は複雑になるか？
-  - シンプルさを保ちながら型安全にできるか？
+- **What are the trade-offs between type complexity and usability?**
+  - Does pursuing type safety make the API complex?
+  - Can we maintain both simplicity and type safety?
 
-### 意図的なスコープ制限
+### Intentional Scope Limitations
 
-以下の機能は意図的に対象外としています：
+The following features are intentionally excluded:
 
-- **ネストしたフィールド**（例：`user.address.city`）
-  - 型推論が複雑化し、設計意図が不明瞭になるため
+- **Nested fields** (e.g., `user.address.city`)
+  - Type inference becomes complex and design intent unclear
 
-- **非同期バリデーション**
-  - 型による保証が困難になり、ランタイムの状態管理が複雑化するため
+- **Async validation**
+  - Type guarantees become difficult, runtime state management becomes complex
 
-- **フィールド配列**
-  - 動的な型推論が必要になり、型の分かりやすさが損なわれるため
+- **Field arrays**
+  - Dynamic type inference required, type clarity is compromised
 
-**「型の分かりやすさ」を優先**するため、これらの機能は追加しません。
-機能の網羅性ではなく、型設計の明確さを重視しています。
+We prioritize **"type clarity"** over feature completeness, focusing on design clarity rather than comprehensive features.
 
 ## Type Design
 
