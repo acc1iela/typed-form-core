@@ -31,17 +31,17 @@ expectError(simpleForm.register('invalid'));
 expectError(simpleForm.register('email'));
 
 // ===================================================================
-// テスト3: setValues の型安全性
+// テスト3: setValue の型安全性
 // ===================================================================
 
 // 正しい型の値は受け入れられる
-simpleForm.setValues('username', 'john');
-simpleForm.setValues('age', 25);
+simpleForm.setValue('username', 'john');
+simpleForm.setValue('age', 25);
 
 // 型が合わない値はコンパイルエラー
-expectError(simpleForm.setValues('username', 123));
-expectError(simpleForm.setValues('age', 'not a number'));
-expectError(simpleForm.setValues('invalid', 'value'));
+expectError(simpleForm.setValue('username', 123));
+expectError(simpleForm.setValue('age', 'not a number'));
+expectError(simpleForm.setValue('invalid', 'value'));
 
 // ===================================================================
 // テスト4: validators の型安全性
@@ -135,7 +135,6 @@ expectAssignable<{
   values: SimpleForm;
   errors: Partial<Record<keyof SimpleForm, string>>;
   touched: Partial<Record<keyof SimpleForm, boolean>>;
-  isSubmitting: boolean;
 }>(simpleForm);
 
 // ===================================================================

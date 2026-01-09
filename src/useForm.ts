@@ -10,8 +10,6 @@ export function useForm<TValues extends Record<string, unknown>>(
   const [errors, setErrors] = useState<Errors<TValues>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof TValues, boolean>>>({});
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const validateField = useCallback(
     <K extends keyof TValues>(name: K): boolean => {
       const validate = validators?.[name];
@@ -85,7 +83,6 @@ export function useForm<TValues extends Record<string, unknown>>(
       setValues(nextValues ?? defaultValues);
       setErrors({});
       setTouched({});
-      setIsSubmitting(false);
     },
     [defaultValues]
   );
@@ -98,22 +95,19 @@ export function useForm<TValues extends Record<string, unknown>>(
           (e as { preventDefault: () => void }).preventDefault();
         }
 
-        setIsSubmitting(true);
         const ok = validateAll();
         if (ok) onValid(values);
-        setIsSubmitting(false);
       };
     },
     [validateAll, values]
   );
 
   return {
-    values: useMemo(() => values, [values]),
-    errors: useMemo(() => errors, [errors]),
-    touched: useMemo(() => touched, [touched]),
-    isSubmitting: useMemo(() => isSubmitting, [isSubmitting]),
+    values,
+    errors,
+    touched,
     register,
-    setValues: setValue,
+    setValue,
     validateField,
     validateAll,
     handleSubmit,

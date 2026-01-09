@@ -16,7 +16,6 @@ describe('useForm', () => {
       expect(result.current.values).toEqual({ username: '', age: 0 });
       expect(result.current.errors).toEqual({});
       expect(result.current.touched).toEqual({});
-      expect(result.current.isSubmitting).toBe(false);
     });
   });
 
@@ -88,8 +87,8 @@ describe('useForm', () => {
     });
   });
 
-  // テストケース3: setValues
-  describe('setValues', () => {
+  // テストケース3: setValue
+  describe('setValue', () => {
     it('指定したフィールドの値を更新する', () => {
       const { result } = renderHook(() =>
         useForm({
@@ -98,7 +97,7 @@ describe('useForm', () => {
       );
 
       act(() => {
-        result.current.setValues('age', 30);
+        result.current.setValue('age', 30);
       });
 
       expect(result.current.values.age).toBe(30);
@@ -113,8 +112,8 @@ describe('useForm', () => {
       );
 
       act(() => {
-        result.current.setValues('username', 'john');
-        result.current.setValues('age', 25);
+        result.current.setValue('username', 'john');
+        result.current.setValue('age', 25);
       });
 
       expect(result.current.values).toEqual({ username: 'john', age: 25 });
@@ -223,7 +222,7 @@ describe('useForm', () => {
 
       // 値を更新
       act(() => {
-        result.current.setValues('username', 'valid');
+        result.current.setValue('username', 'valid');
       });
 
       // 値が更新された状態でバリデーション
@@ -409,26 +408,6 @@ describe('useForm', () => {
         });
       }).not.toThrow();
     });
-
-    it('isSubmittingフラグが設定される', () => {
-      const { result } = renderHook(() =>
-        useForm({
-          defaultValues: { username: 'john' },
-        })
-      );
-
-      const onValid = vi.fn();
-      const submitHandler = result.current.handleSubmit(onValid);
-
-      expect(result.current.isSubmitting).toBe(false);
-
-      act(() => {
-        submitHandler();
-      });
-
-      // 同期処理なので即座にfalseに戻る
-      expect(result.current.isSubmitting).toBe(false);
-    });
   });
 
   // テストケース7: reset
@@ -441,8 +420,8 @@ describe('useForm', () => {
       );
 
       act(() => {
-        result.current.setValues('username', 'changed');
-        result.current.setValues('age', 30);
+        result.current.setValue('username', 'changed');
+        result.current.setValue('age', 30);
       });
 
       act(() => {
@@ -452,7 +431,6 @@ describe('useForm', () => {
       expect(result.current.values).toEqual({ username: '', age: 0 });
       expect(result.current.errors).toEqual({});
       expect(result.current.touched).toEqual({});
-      expect(result.current.isSubmitting).toBe(false);
     });
 
     it('引数で新しい値を指定してリセットできる', () => {
@@ -540,10 +518,10 @@ describe('useForm', () => {
 
       // 各フィールドの型安全性を確認
       act(() => {
-        result.current.setValues('string', 'updated');
-        result.current.setValues('number', 100);
-        result.current.setValues('boolean', false);
-        result.current.setValues('nullable', 'not null');
+        result.current.setValue('string', 'updated');
+        result.current.setValue('number', 100);
+        result.current.setValue('boolean', false);
+        result.current.setValue('nullable', 'not null');
       });
 
       expect(result.current.values).toEqual({

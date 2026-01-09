@@ -28,11 +28,10 @@ export type UseFormReturn<TValues extends Record<string, unknown>> = {
   values: TValues;
   errors: Errors<TValues>;
   touched: Touched<TValues>;
-  isSubmitting: boolean;
 
   register: <K extends keyof TValues>(name: K) => RegisterReturn<TValues, K>;
 
-  setValues: <K extends keyof TValues>(name: K, value: TValues[K]) => void;
+  setValue: <K extends keyof TValues>(name: K, value: TValues[K]) => void;
 
   validateField: <K extends keyof TValues>(name: K) => boolean;
   validateAll: () => boolean;
