@@ -78,9 +78,7 @@ function LoginPage() {
         {form.errors.password && <span>{form.errors.password}</span>}
       </div>
 
-      <button type="submit" disabled={form.isSubmitting}>
-        Login
-      </button>
+      <button type="submit">Login</button>
     </form>
   );
 }
@@ -144,7 +142,6 @@ Creates a form instance with type-safe field management.
 - `values: TValues` - Current form values
 - `errors: Errors<TValues>` - Current validation errors (empty object if no errors)
 - `touched: Touched<TValues>` - Fields that have been blurred (empty object initially)
-- `isSubmitting: boolean` - Whether form is currently submitting (always `false` for sync validation)
 
 **Methods:**
 
@@ -165,7 +162,7 @@ Creates a form instance with type-safe field management.
   // usernameField.value is guaranteed to be string
   ```
 
-- `setValues<K extends keyof TValues>(name: K, value: TValues[K])` - Manually update a field value
+- `setValue<K extends keyof TValues>(name: K, value: TValues[K])` - Manually update a field value
 
 - `validateField<K extends keyof TValues>(name: K)` - Validate a single field
   - Returns: `boolean` - `true` if valid, `false` if invalid
@@ -191,10 +188,10 @@ const form = useForm({ defaultValues: { username: '', age: 0 } });
 form.register('invalid');
 
 // ❌ TypeScript Error: string is not assignable to number
-form.setValues('age', 'not a number');
+form.setValue('age', 'not a number');
 
 // ✅ Correct
-form.setValues('age', 25);
+form.setValue('age', 25);
 form.register('username').onChange('valid string');
 ```
 
@@ -218,7 +215,7 @@ To achieve this invariant, we consistently use this pattern across all APIs:
 This ensures:
 
 - `register('username')` returns type `RegisterReturn<TValues, 'username'>`
-- `setValues('username', value)` only accepts values of type `TValues['username']`
+- `setValue('username', value)` only accepts values of type `TValues['username']`
 - `validators.username` has type `(value: TValues['username'], values: TValues) => ...`
 
 ### Learning Goals
