@@ -37,7 +37,7 @@ export function useForm<TValues extends Record<string, unknown>>(
 
   const validateAll = useCallback((): boolean => {
     if (!validators) {
-      setErrors({});
+      setErrors((prev) => (Object.keys(prev).length === 0 ? prev : {}));
       return true;
     }
 
