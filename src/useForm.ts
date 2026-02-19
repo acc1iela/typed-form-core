@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState } from 'react';
 import type { Errors, UseFormOptions, UseFormReturn } from './types';
 
 export function useForm<TValues extends Record<string, unknown>>(
