@@ -3,6 +3,7 @@ export type {
   RegisterReturn,
   Touched,
   Validators,
+  UseFormOptions,
   UseFormReturn,
   ValidatorResult,
 } from './types';
