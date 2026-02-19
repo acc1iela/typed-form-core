@@ -1,6 +1,6 @@
 import { expectType, expectError, expectAssignable } from 'tsd';
-import { useForm } from './useForm';
-import type { Validators, RegisterReturn, UseFormReturn } from './types';
+import { useForm } from './index';
+import type { Validators, RegisterReturn, UseFormReturn } from './index';
 
 // ===================================================================
 // テスト1: useForm の基本的な型推論
