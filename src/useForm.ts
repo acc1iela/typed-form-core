@@ -14,12 +14,6 @@ export function useForm<TValues extends Record<string, unknown>>(
     <K extends keyof TValues>(name: K): boolean => {
       const validate = validators?.[name];
       if (!validate) {
-        setErrors((prev) => {
-          if (!(name in prev)) return prev;
-          const next = { ...prev };
-          delete next[name];
-          return next;
-        });
         return true;
       }
 
