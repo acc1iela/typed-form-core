@@ -73,7 +73,7 @@ export function useForm<TValues extends Record<string, unknown>>(
           setTouched((prev) => ({ ...prev, [name]: true }));
           validateField(name);
         },
-      } as const;
+      };
     },
     [setValue, validateField, values]
   );
