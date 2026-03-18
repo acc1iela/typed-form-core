@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { Errors, UseFormOptions, UseFormReturn } from './types';
 
 export function useForm<TValues extends Record<string, unknown>>(
@@ -6,6 +6,7 @@ export function useForm<TValues extends Record<string, unknown>>(
 ): UseFormReturn<TValues> {
   const { defaultValues, validators } = options;
 
+  const defaultValuesRef = useRef(defaultValues);
   const [values, setValues] = useState<TValues>(defaultValues);
   const [errors, setErrors] = useState<Errors<TValues>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof TValues, boolean>>>({});
@@ -74,11 +75,11 @@ export function useForm<TValues extends Record<string, unknown>>(
 
   const reset = useCallback(
     (nextValues?: TValues) => {
-      setValues(nextValues ?? defaultValues);
+      setValues(nextValues ?? defaultValuesRef.current);
       setErrors({});
       setTouched({});
     },
-    [defaultValues]
+    []
   );
 
   const handleSubmit = useCallback(
