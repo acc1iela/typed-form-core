@@ -83,11 +83,8 @@ export function useForm<TValues extends Record<string, unknown>>(
 
   const handleSubmit = useCallback(
     (onValid: (v: TValues) => void) => {
-      return (e?: unknown) => {
-        // React form submitイベントが来ても依存しない（UIなし方針）
-        if (e && typeof (e as { preventDefault?: () => void }).preventDefault === 'function') {
-          (e as { preventDefault: () => void }).preventDefault();
-        }
+      return (e?: { preventDefault?: () => void }) => {
+        e?.preventDefault?.();
 
         const ok = validateAll();
         if (ok) onValid(values);

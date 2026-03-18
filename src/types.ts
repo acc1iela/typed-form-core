@@ -36,7 +36,7 @@ export type UseFormReturn<TValues extends Record<string, unknown>> = {
   validateField: <K extends keyof TValues>(name: K) => boolean;
   validateAll: () => boolean;
 
-  handleSubmit: (onValid: (values: TValues) => void) => (e?: unknown) => void;
+  handleSubmit: (onValid: (values: TValues) => void) => (e?: { preventDefault?: () => void }) => void;
 
   reset: (nextValues?: TValues) => void;
 };

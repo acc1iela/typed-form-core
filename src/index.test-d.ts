@@ -198,4 +198,4 @@ const handleSubmit = simpleForm.handleSubmit((values) => {
 });
 
 // handleSubmit は関数を返す
-expectType<(e?: unknown) => void>(handleSubmit);
+expectType<(e?: { preventDefault?: () => void }) => void>(handleSubmit);
