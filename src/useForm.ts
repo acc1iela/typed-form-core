@@ -38,7 +38,7 @@ export function useForm<TValues extends Record<string, unknown>>(
     let ok = true;
     const nextErrors: Errors<TValues> = {};
 
-    (Object.keys(values) as Array<keyof TValues>).forEach((key) => {
+    (Object.keys(validators) as Array<keyof TValues>).forEach((key) => {
       const validate = validators[key];
       if (!validate) return;
 
