@@ -28,6 +28,8 @@ export type UseFormReturn<TValues extends Record<string, unknown>> = {
   values: TValues;
   errors: Errors<TValues>;
   touched: Touched<TValues>;
+  isDirty: boolean;
+  dirtyFields: Partial<Record<keyof TValues, boolean>>;
 
   register: <K extends keyof TValues>(name: K) => RegisterReturn<TValues, K>;
 

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { Errors, UseFormOptions, UseFormReturn } from './types';
 
 export function useForm<TValues extends Record<string, unknown>>(
@@ -73,6 +73,17 @@ export function useForm<TValues extends Record<string, unknown>>(
     [setValue, validateField, values]
   );
 
+  const dirtyFields = useMemo((): Partial<Record<keyof TValues, boolean>> => {
+    // TODO(human): defaultValuesRef.current と values を比較して
+    // 変更されたフィールドのみ true になるオブジェクトを返す
+    return {};
+  }, [values]);
+
+  const isDirty = useMemo(
+    () => Object.values(dirtyFields).some(Boolean),
+    [dirtyFields]
+  );
+
   const reset = useCallback(
     (nextValues?: TValues) => {
       setValues(nextValues ?? defaultValuesRef.current);
@@ -98,6 +109,8 @@ export function useForm<TValues extends Record<string, unknown>>(
     values,
     errors,
     touched,
+    isDirty,
+    dirtyFields,
     register,
     setValue,
     validateField,
