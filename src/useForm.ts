@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import type { Errors, UseFormOptions, UseFormReturn } from './types';
+import type { Errors, Touched, UseFormOptions, UseFormReturn } from './types';
 
 export function useForm<TValues extends Record<string, unknown>>(
   options: UseFormOptions<TValues>
@@ -9,7 +9,7 @@ export function useForm<TValues extends Record<string, unknown>>(
   const defaultValuesRef = useRef(defaultValues);
   const [values, setValues] = useState<TValues>(defaultValues);
   const [errors, setErrors] = useState<Errors<TValues>>({});
-  const [touched, setTouched] = useState<Partial<Record<keyof TValues, boolean>>>({});
+  const [touched, setTouched] = useState<Touched<TValues>>({});
 
   const validateField = useCallback(
     <K extends keyof TValues>(name: K): boolean => {
