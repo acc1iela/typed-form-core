@@ -392,6 +392,21 @@ describe('useForm', () => {
       expect(mockEvent.preventDefault).toHaveBeenCalled();
     });
 
+    it('submit時に全フィールドがtouchedになる', () => {
+      const { result } = renderHook(() =>
+        useForm({
+          defaultValues: { username: '', age: 0 },
+        })
+      );
+
+      act(() => {
+        result.current.handleSubmit(() => {})();
+      });
+
+      expect(result.current.touched.username).toBe(true);
+      expect(result.current.touched.age).toBe(true);
+    });
+
     it('preventDefaultがないイベントでもエラーにならない', () => {
       const { result } = renderHook(() =>
         useForm({

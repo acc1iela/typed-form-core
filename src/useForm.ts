@@ -98,6 +98,13 @@ export function useForm<TValues extends Record<string, unknown>>(
       return (e?: { preventDefault?: () => void }) => {
         e?.preventDefault?.();
 
+        setTouched(
+          (Object.keys(values) as Array<keyof TValues>).reduce<Touched<TValues>>(
+            (acc, key) => ({ ...acc, [key]: true }),
+            {}
+          )
+        );
+
         const ok = validateAll();
         if (ok) onValid(values);
       };
