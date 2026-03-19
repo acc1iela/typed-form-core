@@ -73,11 +73,17 @@ export function useForm<TValues extends Record<string, unknown>>(
     [setValue, validateField, values]
   );
 
-  const dirtyFields = useMemo((): Partial<Record<keyof TValues, boolean>> => {
-    // TODO(human): defaultValuesRef.current と values を比較して
-    // 変更されたフィールドのみ true になるオブジェクトを返す
-    return {};
-  }, [values]);
+  const dirtyFields = useMemo(
+    (): Partial<Record<keyof TValues, boolean>> =>
+      (Object.keys(values) as Array<keyof TValues>).reduce<Partial<Record<keyof TValues, boolean>>>(
+        (acc, key) => {
+          if (values[key] !== defaultValuesRef.current[key]) acc[key] = true;
+          return acc;
+        },
+        {}
+      ),
+    [values]
+  );
 
   const isDirty = useMemo(
     () => Object.values(dirtyFields).some(Boolean),

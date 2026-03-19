@@ -199,3 +199,14 @@ const handleSubmit = simpleForm.handleSubmit((values) => {
 
 // handleSubmit は関数を返す
 expectType<(e?: { preventDefault?: () => void }) => void>(handleSubmit);
+
+// ===================================================================
+// テスト12: isDirty / dirtyFields の型
+// ===================================================================
+
+expectType<boolean>(simpleForm.isDirty);
+expectType<Partial<Record<keyof SimpleForm, boolean>>>(simpleForm.dirtyFields);
+
+// dirtyFields の各フィールドは boolean | undefined
+expectType<boolean | undefined>(simpleForm.dirtyFields.username);
+expectType<boolean | undefined>(simpleForm.dirtyFields.age);

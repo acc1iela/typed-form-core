@@ -493,6 +493,66 @@ describe('useForm', () => {
     });
   });
 
+  // テストケース8: isDirty / dirtyFields
+  describe('isDirty / dirtyFields', () => {
+    it('初期状態ではisDirty=false、dirtyFieldsは空', () => {
+      const { result } = renderHook(() =>
+        useForm({ defaultValues: { username: '', age: 0 } })
+      );
+
+      expect(result.current.isDirty).toBe(false);
+      expect(result.current.dirtyFields).toEqual({});
+    });
+
+    it('フィールドを変更するとdirtyFieldsにtrueが入る', () => {
+      const { result } = renderHook(() =>
+        useForm({ defaultValues: { username: '', age: 0 } })
+      );
+
+      act(() => {
+        result.current.setValue('username', 'john');
+      });
+
+      expect(result.current.dirtyFields.username).toBe(true);
+      expect(result.current.dirtyFields.age).toBeUndefined();
+      expect(result.current.isDirty).toBe(true);
+    });
+
+    it('デフォルト値に戻すとdirtyFieldsから除外される', () => {
+      const { result } = renderHook(() =>
+        useForm({ defaultValues: { username: 'default', age: 0 } })
+      );
+
+      act(() => {
+        result.current.setValue('username', 'changed');
+      });
+      expect(result.current.dirtyFields.username).toBe(true);
+
+      act(() => {
+        result.current.setValue('username', 'default');
+      });
+      expect(result.current.dirtyFields.username).toBeUndefined();
+      expect(result.current.isDirty).toBe(false);
+    });
+
+    it('resetするとisDirty=falseになる', () => {
+      const { result } = renderHook(() =>
+        useForm({ defaultValues: { username: '', age: 0 } })
+      );
+
+      act(() => {
+        result.current.setValue('username', 'changed');
+      });
+      expect(result.current.isDirty).toBe(true);
+
+      act(() => {
+        result.current.reset();
+      });
+      expect(result.current.isDirty).toBe(false);
+      expect(result.current.dirtyFields).toEqual({});
+    });
+  });
+
   // エッジケースのテスト
   describe('エッジケース', () => {
     it('空のdefaultValuesでも動作する', () => {
