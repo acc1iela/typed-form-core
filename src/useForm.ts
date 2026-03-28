@@ -74,8 +74,8 @@ export function useForm<TValues extends Record<string, unknown>>(
   );
 
   const dirtyFields = useMemo(
-    (): Partial<Record<keyof TValues, boolean>> =>
-      (Object.keys(values) as Array<keyof TValues>).reduce<Partial<Record<keyof TValues, boolean>>>(
+    (): Partial<Record<keyof TValues, true>> =>
+      (Object.keys(values) as Array<keyof TValues>).reduce<Partial<Record<keyof TValues, true>>>(
         (acc, key) => {
           if (values[key] !== defaultValuesRef.current[key]) acc[key] = true;
           return acc;

@@ -29,7 +29,7 @@ export type UseFormReturn<TValues extends Record<string, unknown>> = {
   errors: Errors<TValues>;
   touched: Touched<TValues>;
   isDirty: boolean;
-  dirtyFields: Partial<Record<keyof TValues, boolean>>;
+  dirtyFields: Partial<Record<keyof TValues, true>>;
 
   register: <K extends keyof TValues>(name: K) => RegisterReturn<TValues, K>;
 

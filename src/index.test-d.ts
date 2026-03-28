@@ -205,8 +205,8 @@ expectType<(e?: { preventDefault?: () => void }) => void>(handleSubmit);
 // ===================================================================
 
 expectType<boolean>(simpleForm.isDirty);
-expectType<Partial<Record<keyof SimpleForm, boolean>>>(simpleForm.dirtyFields);
+expectType<Partial<Record<keyof SimpleForm, true>>>(simpleForm.dirtyFields);
 
-// dirtyFields の各フィールドは boolean | undefined
-expectType<boolean | undefined>(simpleForm.dirtyFields.username);
-expectType<boolean | undefined>(simpleForm.dirtyFields.age);
+// dirtyFields の各フィールドは true | undefined（falseは入らない設計）
+expectType<true | undefined>(simpleForm.dirtyFields.username);
+expectType<true | undefined>(simpleForm.dirtyFields.age);
