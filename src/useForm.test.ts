@@ -180,6 +180,28 @@ describe('useForm', () => {
       expect(result.current.errors.username).toBe('Required');
     });
 
+    it('validatorが空文字を返す場合はnullと同様にエラーなし扱いになる', () => {
+      const validators: Validators<{ username: string }> = {
+        username: () => '',
+      };
+
+      const { result } = renderHook(() =>
+        useForm({
+          defaultValues: { username: 'test' },
+          validators,
+        })
+      );
+
+      let isValid: boolean;
+      act(() => {
+        isValid = result.current.validateField('username');
+      });
+
+      // 空文字はfalsyなのでnullと同様にバリデーション成功扱い
+      expect(isValid!).toBe(true);
+      expect(result.current.errors.username).toBeUndefined();
+    });
+
     it('validatorはvaluesも受け取れる（相互依存チェック）', () => {
       const validators: Validators<{ password: string; confirm: string }> = {
         confirm: (value, values) =>

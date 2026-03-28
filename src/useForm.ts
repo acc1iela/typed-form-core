@@ -25,7 +25,7 @@ export function useForm<TValues extends Record<string, unknown>>(
         else delete next[name];
         return next;
       });
-      return message === null;
+      return !message;
     },
     [validators, values]
   );
