@@ -484,6 +484,31 @@ describe('useForm', () => {
       expect(result.current.values).toEqual({ username: 'newdefault', age: 99 });
     });
 
+    it('reset(nextValues)後にreset()すると新しいデフォルト値に戻る', () => {
+      const { result } = renderHook(() =>
+        useForm({
+          defaultValues: { username: '', age: 0 },
+        })
+      );
+
+      // 新しい値でリセット（新しいデフォルトとして定着）
+      act(() => {
+        result.current.reset({ username: 'newdefault', age: 99 });
+      });
+
+      // さらに値を変更
+      act(() => {
+        result.current.setValue('username', 'changed');
+      });
+
+      // 引数なしでリセット → 新しいデフォルト値に戻る
+      act(() => {
+        result.current.reset();
+      });
+
+      expect(result.current.values).toEqual({ username: 'newdefault', age: 99 });
+    });
+
     it('resetでエラーとtouchedもクリアされる', () => {
       const validators: Validators<{ username: string }> = {
         username: (value) => (value.length > 0 ? null : 'Required'),
