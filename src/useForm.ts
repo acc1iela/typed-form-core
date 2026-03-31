@@ -11,6 +11,9 @@ export function useForm<TValues extends Record<string, unknown>>(
   const [errors, setErrors] = useState<Errors<TValues>>({});
   const [touched, setTouched] = useState<Touched<TValues>>({});
 
+  const valuesRef = useRef(values);
+  valuesRef.current = values;
+
   const validateField = useCallback(
     <K extends keyof TValues>(name: K): boolean => {
       const validate = validators?.[name];
@@ -18,7 +21,7 @@ export function useForm<TValues extends Record<string, unknown>>(
         return true;
       }
 
-      const message = validate(values[name], values);
+      const message = validate(valuesRef.current[name], valuesRef.current);
       setErrors((prev) => {
         const next = { ...prev };
         if (message) next[name] = message;
@@ -27,7 +30,7 @@ export function useForm<TValues extends Record<string, unknown>>(
       });
       return !message;
     },
-    [validators, values]
+    [validators]
   );
 
   const validateAll = useCallback((): boolean => {
@@ -43,7 +46,7 @@ export function useForm<TValues extends Record<string, unknown>>(
       const validate = validators[key];
       if (!validate) return;
 
-      const message = validate(values[key], values);
+      const message = validate(valuesRef.current[key], valuesRef.current);
       if (message) {
         ok = false;
         nextErrors[key] = message;
@@ -52,7 +55,7 @@ export function useForm<TValues extends Record<string, unknown>>(
 
     setErrors(nextErrors);
     return ok;
-  }, [validators, values]);
+  }, [validators]);
 
   const setValue = useCallback(<K extends keyof TValues>(name: K, value: TValues[K]) => {
     setValues((prev) => ({ ...prev, [name]: value }));
@@ -106,17 +109,17 @@ export function useForm<TValues extends Record<string, unknown>>(
         e?.preventDefault?.();
 
         setTouched(
-          (Object.keys(values) as Array<keyof TValues>).reduce<Touched<TValues>>(
+          (Object.keys(valuesRef.current) as Array<keyof TValues>).reduce<Touched<TValues>>(
             (acc, key) => ({ ...acc, [key]: true }),
             {}
           )
         );
 
         const ok = validateAll();
-        if (ok) onValid(values);
+        if (ok) onValid(valuesRef.current);
       };
     },
-    [validateAll, values]
+    [validateAll]
   );
 
   return {
