@@ -116,7 +116,7 @@ export function useForm<TValues extends Record<string, unknown>>(
         );
 
         const ok = validateAll();
-        if (ok) onValid(valuesRef.current);
+        if (ok) onValid({ ...valuesRef.current });
       };
     },
     [validateAll]

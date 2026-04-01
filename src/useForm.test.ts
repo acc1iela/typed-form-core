@@ -464,6 +464,22 @@ describe('useForm', () => {
         });
       }).not.toThrow();
     });
+
+    it('onValidに渡された値を変異しても内部状態に影響しない', () => {
+      const { result } = renderHook(() =>
+        useForm({
+          defaultValues: { username: 'initial' },
+        })
+      );
+
+      act(() => {
+        result.current.handleSubmit((values) => {
+          (values as { username: string }).username = 'mutated';
+        })();
+      });
+
+      expect(result.current.values.username).toBe('initial');
+    });
   });
 
   // テストケース7: reset
