@@ -95,7 +95,7 @@ export function useForm<TValues extends Record<string, unknown>>(
 
   const reset = useCallback(
     (nextValues?: TValues) => {
-      if (nextValues) defaultValuesRef.current = nextValues;
+      if (nextValues) defaultValuesRef.current = { ...nextValues };
       setValues(nextValues ?? defaultValuesRef.current);
       setErrors({});
       setTouched({});
