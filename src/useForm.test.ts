@@ -202,6 +202,25 @@ describe('useForm', () => {
       expect(result.current.errors.username).toBeUndefined();
     });
 
+    it('validatorがundefinedを返した場合はエラーなしとして扱う', () => {
+      const { result } = renderHook(() =>
+        useForm({
+          defaultValues: { username: '' },
+          validators: {
+            username: (() => undefined) as unknown as (v: string) => string | null,
+          },
+        })
+      );
+
+      let isValid: boolean;
+      act(() => {
+        isValid = result.current.validateField('username');
+      });
+
+      expect(isValid!).toBe(true);
+      expect(result.current.errors.username).toBeUndefined();
+    });
+
     it('validatorはvaluesも受け取れる（相互依存チェック）', () => {
       const validators: Validators<{ password: string; confirm: string }> = {
         confirm: (value, values) =>

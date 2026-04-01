@@ -24,11 +24,11 @@ export function useForm<TValues extends Record<string, unknown>>(
       const message = validate(valuesRef.current[name], valuesRef.current);
       setErrors((prev) => {
         const next = { ...prev };
-        if (message) next[name] = message;
+        if (typeof message === 'string' && message !== '') next[name] = message;
         else delete next[name];
         return next;
       });
-      return !message;
+      return typeof message !== 'string' || message === '';
     },
     [validators]
   );
@@ -47,7 +47,7 @@ export function useForm<TValues extends Record<string, unknown>>(
       if (!validate) return;
 
       const message = validate(valuesRef.current[key], valuesRef.current);
-      if (message) {
+      if (typeof message === 'string' && message !== '') {
         ok = false;
         nextErrors[key] = message;
       }
