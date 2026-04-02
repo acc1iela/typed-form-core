@@ -134,7 +134,7 @@ expectType<UseFormReturn<SimpleForm>>(simpleForm);
 expectAssignable<{
   values: SimpleForm;
   errors: Partial<Record<keyof SimpleForm, string>>;
-  touched: Partial<Record<keyof SimpleForm, boolean>>;
+  touched: Partial<Record<keyof SimpleForm, true>>;
 }>(simpleForm);
 
 // ===================================================================

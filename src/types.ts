@@ -9,7 +9,7 @@ export type Errors<TValues extends Record<string, unknown>> = Partial<
 >;
 
 export type Touched<TValues extends Record<string, unknown>> = Partial<
-  Record<keyof TValues, boolean>
+  Record<keyof TValues, true>
 >;
 
 export type UseFormOptions<TValues extends Record<string, unknown>> = {
