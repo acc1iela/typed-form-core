@@ -53,7 +53,17 @@ export function useForm<TValues extends Record<string, unknown>>(
       }
     });
 
-    setErrors(nextErrors);
+    setErrors((prev) => {
+      const prevKeys = Object.keys(prev) as Array<keyof TValues>;
+      const nextKeys = Object.keys(nextErrors) as Array<keyof TValues>;
+      if (
+        prevKeys.length === nextKeys.length &&
+        nextKeys.every((k) => prev[k] === nextErrors[k])
+      ) {
+        return prev;
+      }
+      return nextErrors;
+    });
     return ok;
   }, [validators]);
 

@@ -339,6 +339,32 @@ describe('useForm', () => {
       expect(result.current.errors).toEqual({});
     });
 
+    it('エラーが変化しない場合はerrorsオブジェクトの参照が変わらない', () => {
+      const validators: Validators<{ username: string }> = {
+        username: (value) => (value.length > 0 ? null : 'Required'),
+      };
+
+      const { result } = renderHook(() =>
+        useForm({
+          defaultValues: { username: '' },
+          validators,
+        })
+      );
+
+      // 1回目のバリデーション（エラー発生）
+      act(() => {
+        result.current.validateAll();
+      });
+      const errorsAfterFirst = result.current.errors;
+
+      // 2回目のバリデーション（同じエラーのまま）
+      act(() => {
+        result.current.validateAll();
+      });
+
+      expect(result.current.errors).toBe(errorsAfterFirst);
+    });
+
     it('一部のフィールドのみバリデータがある場合', () => {
       const validators: Validators<{ username: string; age: number }> = {
         username: (value) => (value.length > 0 ? null : 'Required'),
